@@ -524,12 +524,384 @@
 //     </AnimatePresence>
 //   );
 // } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+
+// import { useState } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import {
+//   X, Loader2, CheckCircle, AlertCircle, Mail, Phone, User, MessageSquare, MapPin,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Textarea } from "@/components/ui/textarea";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import Image from "next/image";
+
+// interface LeadCaptureFormProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+//   packageTitle?: string;
+//   packagePrice?: string;
+// }
+
+// interface FormData {
+//   fullName: string;
+//   email: string;
+//   phone: string;
+//   destination: string;
+//   budget: string;
+//   message: string;
+//   newsletterConsent: boolean;
+// }
+// interface FormErrors {
+//   [key: string]: string | undefined;
+//   fullName?: string;
+//   email?: string;
+//   phone?: string;
+//   destination?: string;
+//   budget?: string;
+//   message?: string;
+//   newsletterConsent?: string; // ✅ added
+// }
+
+// // interface FormErrors {
+// //   fullName?: string;
+// //   email?: string;
+// //   phone?: string;
+// //   destination?: string;
+// //   budget?: string;
+// //   message?: string;
+// // }
+
+// export default function LeadCaptureForm({ isOpen, onClose, packageTitle, packagePrice }: LeadCaptureFormProps) {
+//   const [formData, setFormData] = useState<FormData>({
+//     fullName: "",
+//     email: "",
+//     phone: "",
+//     destination: "",
+//     budget: "",
+//     message: "",
+//     newsletterConsent: false,
+//   });
+//   const [errors, setErrors] = useState<FormErrors>({});
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+//   const validateForm = (): boolean => {
+//     const newErrors: FormErrors = {};
+//     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+//     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+//       newErrors.email = "Valid email is required";
+//     if (!/^[\+]?[0-9]{10,15}$/.test(formData.phone))
+//       newErrors.phone = "Valid phone number required";
+//     if (!formData.destination.trim()) newErrors.destination = "Destination required";
+//     if (!formData.budget.trim()) newErrors.budget = "Budget required";
+//     if (!formData.message.trim()) newErrors.message = "Message required";
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   };
+
+//   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+//     setFormData(prev => ({ ...prev, [field]: value }));
+//     if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+//   };
+
+//   // const handleSubmit = async (e: React.FormEvent) => {
+//   //   e.preventDefault();
+//   //   if (!validateForm()) return;
+
+//   //   setIsSubmitting(true);
+//   //   setSubmitStatus("idle");
+
+//   //   try {
+//   //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/lead-capture`, {
+//   //       method: "POST",
+//   //       headers: { "Content-Type": "application/json" },
+//   //       body: JSON.stringify({
+//   //         ...formData,
+//   //         packageTitle,
+//   //         packagePrice,
+//   //         timestamp: new Date().toISOString(),
+//   //       }),
+//   //     });
+
+//   //     const data = await res.json();
+//   //     if (res.ok) {
+//   //       setSubmitStatus("success");
+//   //       console.log("✅ Lead submitted:", data);
+//   //       setFormData({
+//   //         fullName: "",
+//   //         email: "",
+//   //         phone: "",
+//   //         destination: "",
+//   //         budget: "",
+//   //         message: "",
+//   //         newsletterConsent: false,
+//   //       });
+//   //       setTimeout(() => {
+//   //         onClose();
+//   //         setSubmitStatus("idle");
+//   //       }, 3000);
+//   //     } else {
+//   //       console.error("❌ Submit failed:", data);
+//   //       setSubmitStatus("error");
+//   //     }
+//   //   } catch (err) {
+//   //     console.error("❌ Error submitting form:", err);
+//   //     setSubmitStatus("error");
+//   //   } finally {
+//   //     setIsSubmitting(false);
+//   //   }
+//   // };
+// // 
+
+
+
+
+
+
+
+
+// const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+//   setSubmitStatus("loading");
+//   setIsSubmitting(true);
+
+//   try {
+//     const res = await fetch("/api/lead-capture", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(formData),
+//     });
+
+//     const data = await res.json();
+
+//     if (res.ok) {
+//       console.log("✅ Form submitted successfully");
+//       setSubmitStatus("success");
+
+//       // ✅ Close modal safely using onClose()
+//       setTimeout(() => {
+//         onClose();
+//         setSubmitStatus("idle");
+//       }, 1500);
+//     } else {
+//       console.error("❌ Submit failed:", data);
+//       setSubmitStatus("error");
+//     }
+//   } catch (err) {
+//     console.error("❌ Error submitting form:", err);
+//     setSubmitStatus("error");
+//   } finally {
+//     setIsSubmitting(false);
+//   }
+// };
+
+
+//   return (
+//     <AnimatePresence>
+//       {isOpen && (
+//         <motion.div
+//           initial={{ opacity: 0 }}
+//           animate={{ opacity: 1 }}
+//           exit={{ opacity: 0 }}
+//           className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6"
+//           onClick={onClose}
+//         >
+//           <motion.div
+//             initial={{ scale: 0.9 }}
+//             animate={{ scale: 1 }}
+//             exit={{ scale: 0.9 }}
+//             transition={{ type: "spring", damping: 25, stiffness: 300 }}
+//             className="w-full max-w-md max-h-[calc(100vh-6rem)] overflow-y-auto"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <Card className="shadow-2xl border-0 bg-white">
+//               <CardHeader className="relative pb-2">
+//                 <button onClick={onClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full">
+//                   <X className="w-5 h-5 text-gray-500" />
+//                 </button>
+//                 <div className="flex justify-center">
+//                   <Image src="/headerLogo.png" alt="Logo" width={50} height={50} />
+//                 </div>
+//                 <CardTitle className="text-base font-bold text-gray-900 text-center">
+//                   Book Your Trip
+//                 </CardTitle>
+//                 {packageTitle && (
+//                   <p className="text-gray-600 text-center text-sm">
+//                     {packageTitle} {packagePrice && ` • ${packagePrice}`}
+//                   </p>
+//                 )}
+//               </CardHeader>
+
+//               <CardContent className="p-6 pb-8">
+//                 {submitStatus === "success" ? (
+//                   <motion.div className="text-center py-6">
+//                     <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+//                     <h3 className="text-lg font-semibold text-gray-900">Thank You!</h3>
+//                     <p className="text-gray-600">
+//                       We&apos;ll get back to you within 24 hours.
+//                     </p>
+//                   </motion.div>
+//                 ) : submitStatus === "error" ? (
+//                   <motion.div className="text-center py-6">
+//                     <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
+//                     <h3 className="text-lg font-semibold text-gray-900">Something went wrong</h3>
+//                     <Button
+//                       onClick={() => setSubmitStatus("idle")}
+//                       className="bg-blue-600 hover:bg-blue-700"
+//                     >
+//                       Try Again
+//                     </Button>
+//                   </motion.div>
+//                 ) : (
+//                   <form onSubmit={handleSubmit} className="space-y-3">
+//                     {["fullName", "email", "phone", "destination", "budget"].map((field) => (
+//                       <div key={field}>
+//                         <Input
+//                           type={field === "email" ? "email" : "text"}
+//                           placeholder={`Enter your ${field}`}
+//                           value={(formData as any)[field]}
+//                           onChange={(e) => handleInputChange(field as keyof FormData, e.target.value)}
+//                           disabled={isSubmitting}
+//                           className={`bg-white ${errors[field as keyof FormData] ? "border-red-500" : ""}`}
+//                         />
+//                         {errors[field as keyof FormData] && (
+//                           <p className="text-red-500 text-xs mt-1">
+//                             {errors[field as keyof FormData]}
+//                           </p>
+//                         )}
+//                       </div>
+//                     ))}
+
+//                     <Textarea
+//                       placeholder="Message or requirements"
+//                       value={formData.message}
+//                       onChange={(e) => handleInputChange("message", e.target.value)}
+//                       disabled={isSubmitting}
+//                       className={`bg-white ${errors.message ? "border-red-500" : ""}`}
+//                     />
+//                     {errors.message && (
+//                       <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+//                     )}
+
+//                     <Button
+//                       type="submit"
+//                       disabled={isSubmitting}
+//                       className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 text-sm font-semibold"
+//                     >
+//                       {isSubmitting ? (
+//                         <>
+//                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+//                           Sending...
+//                         </>
+//                       ) : (
+//                         "Send Inquiry"
+//                       )}
+//                     </Button>
+//                   </form>
+//                 )}
+//               </CardContent>
+//             </Card>
+//           </motion.div>
+//         </motion.div>
+//       )}
+//     </AnimatePresence>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
+
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, Loader2, CheckCircle, AlertCircle, Mail, Phone, User, MessageSquare, MapPin,
+X, Loader2, CheckCircle, AlertCircle, Mail, Phone, User, MessageSquare, MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -537,57 +909,64 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
+
 interface LeadCaptureFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  packageTitle?: string;
-  packagePrice?: string;
+isOpen: boolean;
+onClose: () => void;
+packageTitle?: string;
+packagePrice?: string;
 }
+
 
 interface FormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  destination: string;
-  budget: string;
-  message: string;
-  newsletterConsent: boolean;
+fullName: string;
+email: string;
+phone: string;
+destination: string;
+budget: string;
+message: string;
+newsletterConsent: boolean;
 }
+
 
 interface FormErrors {
-  fullName?: string;
-  email?: string;
-  phone?: string;
-  destination?: string;
-  budget?: string;
-  message?: string;
+[key: string]: string | undefined;
+fullName?: string;
+email?: string;
+phone?: string;
+destination?: string;
+budget?: string;
+message?: string;
+newsletterConsent?: string;
 }
 
-export default function LeadCaptureForm({ isOpen, onClose, packageTitle, packagePrice }: LeadCaptureFormProps) {
-  const [formData, setFormData] = useState<FormData>({
-    fullName: "",
-    email: "",
-    phone: "",
-    destination: "",
-    budget: "",
-    message: "",
-    newsletterConsent: false,
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Valid email is required";
-    if (!/^[\+]?[0-9]{10,15}$/.test(formData.phone))
-      newErrors.phone = "Valid phone number required";
-    if (!formData.destination.trim()) newErrors.destination = "Destination required";
-    if (!formData.budget.trim()) newErrors.budget = "Budget required";
-    if (!formData.message.trim()) newErrors.message = "Message required";
-    setErrors(newErrors);
+export default function LeadCaptureForm({ isOpen, onClose, packageTitle, packagePrice }: LeadCaptureFormProps) {
+const [formData, setFormData] = useState<FormData>({
+fullName: "",
+email: "",
+phone: "",
+destination: "",
+budget: "",
+message: "",
+newsletterConsent: false,
+});
+
+
+const [errors, setErrors] = useState<FormErrors>({});
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+
+const validateForm = (): boolean => {
+const newErrors: FormErrors = {};
+if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Valid email is required";
+if (!/^[\+]?[0-9]{10,15}$/.test(formData.phone)) newErrors.phone = "Valid phone number required";
+if (!formData.destination.trim()) newErrors.destination = "Destination required";
+if (!formData.budget.trim()) newErrors.budget = "Budget required";
+if (!formData.message.trim()) newErrors.message = "Message required";
+ setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -644,6 +1023,14 @@ export default function LeadCaptureForm({ isOpen, onClose, packageTitle, package
   //   }
   // };
 // 
+
+
+
+
+
+
+
+
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setSubmitStatus("loading");
