@@ -955,7 +955,9 @@ newsletterConsent: false,
 
 const [errors, setErrors] = useState<FormErrors>({});
 const [isSubmitting, setIsSubmitting] = useState(false);
-const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+// const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
 
 
 const validateForm = (): boolean => {
@@ -1033,7 +1035,7 @@ if (!formData.message.trim()) newErrors.message = "Message required";
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-  setSubmitStatus("loading");
+ //setSubmitStatus("loading");
   setIsSubmitting(true);
 
   try {
