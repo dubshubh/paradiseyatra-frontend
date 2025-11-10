@@ -1285,43 +1285,97 @@ export default function LeadCaptureForm({ isOpen, onClose, packageTitle, package
   };
 
   // ✅ Submit
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
+//     setIsSubmitting(true);
+//     setSubmitStatus("idle");
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/lead-capture`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, packageTitle, packagePrice }),
+//     try {
+//       const res = await fetch("/api/lead-capture", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify(formData),
+// });
+
+//       // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/lead-capture`, {
+//       //   method: "POST",
+//       //   headers: { "Content-Type": "application/json" },
+//       //   body: JSON.stringify({ ...formData, packageTitle, packagePrice }),
+//       // });
+
+//       if (res.ok) {
+//         setSubmitStatus("success");
+//         setFormData({
+//           fullName: "",
+//           email: "",
+//           phone: "",
+//           destination: "",
+//           budget: "",
+//           message: "",
+//         });
+//         setTimeout(() => {
+//           onClose();
+//           setSubmitStatus("idle");
+//         }, 3000);
+//       } else {
+//         setSubmitStatus("error");
+//       }
+//     } catch {
+//       setSubmitStatus("error");
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  setIsSubmitting(true);
+  setSubmitStatus("idle");
+
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://paradiseyatra-backend-1.onrender.com";
+
+    const res = await fetch(`${apiUrl}/api/lead-capture`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,
+        packageTitle,
+        packagePrice,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      console.log("✅ Lead submitted:", data);
+      setSubmitStatus("success");
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        destination: "",
+        budget: "",
+        message: "",
       });
-
-      if (res.ok) {
-        setSubmitStatus("success");
-        setFormData({
-          fullName: "",
-          email: "",
-          phone: "",
-          destination: "",
-          budget: "",
-          message: "",
-        });
-        setTimeout(() => {
-          onClose();
-          setSubmitStatus("idle");
-        }, 3000);
-      } else {
-        setSubmitStatus("error");
-      }
-    } catch {
+      setTimeout(() => {
+        onClose();
+        setSubmitStatus("idle");
+      }, 3000);
+    } else {
+      console.error("❌ Submit failed:", data);
       setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  } catch (err) {
+    console.error("❌ Error submitting form:", err);
+    setSubmitStatus("error");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <AnimatePresence>
